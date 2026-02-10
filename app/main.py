@@ -59,6 +59,32 @@ def get_user(email):
 # TODO: Implement POST /tasks endpoint
 # TODO: Implement GET /tasks endpoint with filtering
 
+@app.route("/tasks", methods=["POST"])
+def create_task():
+    """Create a new task"""
+    global task_counter
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+
+    required = ["title", "user_email"]
+    for field in required:
+        if field not in data:
+            return jsonify({"error": f"Missing field: {field}"}), 400
+
+    task_counter += 1
+    task = Task(
+        id=task_counter,
+        title=data["title"],
+        description=data.get("description", ""),
+        user_email=data["user_email"],
+        priority=data.get("priority", "medium"),
+        status="pending"
+    )
+    tasks[task_counter] = task
+    return jsonify(task.to_dict()), 201
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

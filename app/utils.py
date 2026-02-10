@@ -16,7 +16,7 @@ def validate_email(email: str) -> bool:
     BUG #1: This regex is too permissive - it accepts invalid emails
     """
     # This pattern has a bug - can you find it?
-    pattern = r".+@.+"
+    pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
     return bool(re.match(pattern, email))
 
 
@@ -46,6 +46,9 @@ def calculate_priority_score(priority: str, days_until_due: int) -> int:
         "low": 25
     }
 
+    if priority not in priority_weights:
+        raise ValueError(f"Invalid priority: {priority}")
+
     # Bug: What if priority is not in the dict?
     base_score = priority_weights[priority]
 
@@ -54,9 +57,9 @@ def calculate_priority_score(priority: str, days_until_due: int) -> int:
         urgency_bonus = 50
     elif days_until_due == 0:
         urgency_bonus = 30
-    elif days_until_due < 3:  # Should be <= 3
+    elif days_until_due <= 3:  # Should be <= 3
         urgency_bonus = 20
-    elif days_until_due < 7:  # Should be <= 7
+    elif days_until_due <= 7:  # Should be <= 7
         urgency_bonus = 10
     else:
         urgency_bonus = 0
