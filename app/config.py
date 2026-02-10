@@ -13,6 +13,6 @@ class Config:
     DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
     # API Settings
-    MAX_TASKS_PER_USER = 100
+    MAX_TASKS_PER_USER = 25
     VALID_PRIORITIES = ["low", "medium", "high", "critical"]
     VALID_STATUSES = ["pending", "in_progress", "completed"]
